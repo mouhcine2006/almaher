@@ -17,8 +17,7 @@ source.include_exts = py,png,jpg,kv,atlas
 
 # (list) Application requirements
 # هذه هي المكونات التي سنحتاجها
-requirements = python3,kivy==2.2.1,kivymd==1.1.1,arabic-reshaper,python-bidi,pillow
-
+requirements = python3,kivy==2.3.0,kivymd==1.2.0,pillow,arabic-reshaper,python-bidi
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes
 # requirements.source.kivy = ../../kivy
