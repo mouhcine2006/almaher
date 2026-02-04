@@ -2,7 +2,7 @@
 
 # (str) Title of your application
 title = Almaher
-
+version = 1.0
 # (str) Package name
 package.name = almaher
 
