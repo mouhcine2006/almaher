@@ -2,6 +2,7 @@ name: Build KivyAPK
 on:
   push:
     branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -10,15 +11,28 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # هذه الأداة تقوم بكل العمل الصعب وتجهز بيئة أندرويد كاملة
-      - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
+      # 1. إعداد بايثون
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          command: buildozer android debug
-          buildozer_version: master
+          python-version: '3.10'
 
-      # رفع ملف الـ APK النهائي
+      # 2. تثبيت أدوات النظام (هذه الخطوة اليدوية تحل مشكلة chown)
+      - name: Install System Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          pip install --upgrade pip
+          # تثبيت Buildozer و Cython بنسخ متوافقة
+          pip install buildozer cython==0.29.36
+
+      # 3. بناء التطبيق (سيقوم بتحميل Android SDK تلقائياً)
+      - name: Build with Buildozer
+        run: |
+          # الموافقة على الشروط تلقائياً وبدء البناء
+          yes | buildozer android debug
+
+      # 4. رفع الملف النهائي
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
